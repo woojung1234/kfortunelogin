@@ -9,18 +9,29 @@
       const params = new URLSearchParams(window.location.search);
       const fragment = window.location.hash;
 
-      const statusEl = document.getElementById('status');
-      const urlEl = document.getElementById('raw-url');
-      const errorEl = document.getElementById('error');
+      const paint = () => {
+        const statusEl = document.getElementById('status');
+        const errorEl = document.getElementById('error');
+        const urlEl = document.getElementById('raw-url');
 
-      urlEl.textContent = fullUrl;
+        if (urlEl) urlEl.textContent = fullUrl;
 
-      if (params.has('error')) {
-        errorEl.textContent = `error=${params.get('error')}, description=${params.get('error_description') || ''}`;
-      } else if (params.has('code')) {
-        statusEl.textContent = `code=${params.get('code')}`;
+        if (params.has('error')) {
+          const err = params.get('error');
+          const desc = params.get('error_description') || '';
+          if (statusEl) statusEl.textContent = 'error';
+          if (errorEl) errorEl.textContent = `${err}${desc ? ' - ' + desc : ''}`;
+        } else if (params.has('code')) {
+          if (statusEl) statusEl.textContent = `code=${params.get('code')}`;
+        } else if (statusEl) {
+          statusEl.textContent = 'code 파라미터가 없습니다 (취소/실패)';
+        }
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', paint);
       } else {
-        statusEl.textContent = 'code 파라미터가 없습니다 (취소/실패)';
+        paint();
       }
 
       const query = params.toString();
