@@ -5,9 +5,23 @@
   <title>KFortuneHunters Kakao Redirect</title>
   <script>
     (function () {
-      // ?code=...&state=... 등을 모두 넘겨준다
+      const fullUrl = window.location.href;
+      console.log('[KAKAO REDIRECT] full URL:', fullUrl);
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const urlBox = document.getElementById('raw-url');
+        if (urlBox) {
+          urlBox.textContent = fullUrl;
+        }
+      });
+
       const params = new URLSearchParams(window.location.search);
-      const fragment = window.location.hash;          // # 뒤에 오는 값도 있으면 붙임
+      const fragment = window.location.hash;
+
+      if (params.has('error')) {
+        const errorInfo = `${params.get('error')}${params.get('error_description') ? ' - ' + params.get('error_description') : ''}`;
+        console.warn('[KAKAO REDIRECT] error param detected:', errorInfo);
+      }
 
       const query = params.toString();
       const target = 'kfortune://oauth'
@@ -15,12 +29,14 @@
         + (fragment ? fragment : '');
 
       window.location.replace(target);
-      // 혹시나 대비해 2초 뒤에도 한 번 더 시도
-      setTimeout(() => window.location.href = target, 2000);
+      setTimeout(() => { window.location.href = target; }, 2000);
     })();
   </script>
 </head>
 <body>
   <p>카카오 로그인으로 돌아가는 중…</p>
+  <p style="word-break: break-all; font-size: 12px;">
+    현재 URL: <span id="raw-url"></span>
+  </p>
 </body>
 </html>
