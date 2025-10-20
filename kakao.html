@@ -6,21 +6,21 @@
   <script>
     (function () {
       const fullUrl = window.location.href;
-      console.log('[KAKAO REDIRECT] full URL:', fullUrl);
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const urlBox = document.getElementById('raw-url');
-        if (urlBox) {
-          urlBox.textContent = fullUrl;
-        }
-      });
-
       const params = new URLSearchParams(window.location.search);
       const fragment = window.location.hash;
 
+      const statusEl = document.getElementById('status');
+      const urlEl = document.getElementById('raw-url');
+      const errorEl = document.getElementById('error');
+
+      urlEl.textContent = fullUrl;
+
       if (params.has('error')) {
-        const errorInfo = `${params.get('error')}${params.get('error_description') ? ' - ' + params.get('error_description') : ''}`;
-        console.warn('[KAKAO REDIRECT] error param detected:', errorInfo);
+        errorEl.textContent = `error=${params.get('error')}, description=${params.get('error_description') || ''}`;
+      } else if (params.has('code')) {
+        statusEl.textContent = `code=${params.get('code')}`;
+      } else {
+        statusEl.textContent = 'code 파라미터가 없습니다 (취소/실패)';
       }
 
       const query = params.toString();
@@ -33,10 +33,10 @@
     })();
   </script>
 </head>
-<body>
+<body style="font-size:13px; word-break:break-all;">
   <p>카카오 로그인으로 돌아가는 중…</p>
-  <p style="word-break: break-all; font-size: 12px;">
-    현재 URL: <span id="raw-url"></span>
-  </p>
+  <p><strong>Status:</strong> <span id="status">처리 중…</span></p>
+  <p><strong>Error:</strong> <span id="error">없음</span></p>
+  <p><strong>현재 URL:</strong> <span id="raw-url"></span></p>
 </body>
 </html>
