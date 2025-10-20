@@ -1,53 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <title>KFortuneHunters Kakao Redirect</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kakao OAuth Redirect</title>
+
+  <!-- 2초 후 메타 리프레시 폴백 -->
+  <meta http-equiv="refresh" content="2;url=kfortune://oauth" />
+
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, Pretendard, Helvetica, Arial, sans-serif; margin: 0; }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 24px; line-height: 1.6; }
+    h1 { font-size: 18px; margin: 0 0 12px; }
+    code { padding: 2px 4px; border-radius: 4px; background: #f2f2f2; }
+    a.btn { display: inline-block; margin-top: 12px; padding: 10px 14px; border-radius: 8px; text-decoration: none; border: 1px solid #888; }
+    .muted { opacity: .7; font-size: 13px; }
+  </style>
+
   <script>
     (function () {
-      const fullUrl = window.location.href;
-      const params = new URLSearchParams(window.location.search);
-      const fragment = window.location.hash;
-
-      const paint = () => {
-        const statusEl = document.getElementById('status');
-        const errorEl = document.getElementById('error');
-        const urlEl = document.getElementById('raw-url');
-
-        if (urlEl) urlEl.textContent = fullUrl;
-
-        if (params.has('error')) {
-          const err = params.get('error');
-          const desc = params.get('error_description') || '';
-          if (statusEl) statusEl.textContent = 'error';
-          if (errorEl) errorEl.textContent = `${err}${desc ? ' - ' + desc : ''}`;
-        } else if (params.has('code')) {
-          if (statusEl) statusEl.textContent = `code=${params.get('code')}`;
-        } else if (statusEl) {
-          statusEl.textContent = 'code 파라미터가 없습니다 (취소/실패)';
-        }
-      };
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', paint);
-      } else {
-        paint();
+      function buildTarget() {
+        var q = window.location.search || "";   // Kakao는 보통 ?code=... 로 전달
+        var h = window.location.hash || "";     // 예외적으로 #fragment 도 보존
+        return "kfortune://oauth" + q + h;      // 앱 스킴으로 그대로 전달
       }
 
-      const query = params.toString();
-      const target = 'kfortune://oauth'
-        + (query ? '?' + query : '')
-        + (fragment ? fragment : '');
+      function go(url) {
+        // 다양한 브라우저에서 성공률 높이기 위해 여러 방식으로 시도
+        try { window.location.replace(url); } catch (e) {}
+        setTimeout(function () { try { window.location.href = url; } catch (e) {} }, 800);
+        setTimeout(function () { try { window.location.assign(url); } catch (e) {} }, 1600);
+      }
 
-      window.location.replace(target);
-      setTimeout(() => { window.location.href = target; }, 2000);
+      var target = buildTarget();
+
+      // DOM 준비 후 폴백 버튼과 상태 표시
+      document.addEventListener("DOMContentLoaded", function () {
+        var a = document.getElementById("fallback");
+        a.href = target;
+        var s = document.getElementById("status");
+        s.textContent = "redirecting to: " + target;
+      });
+
+      // 즉시 이동 시도
+      go(target);
     })();
   </script>
 </head>
-<body style="font-size:13px; word-break:break-all;">
-  <p>카카오 로그인으로 돌아가는 중…</p>
-  <p><strong>Status:</strong> <span id="status">처리 중…</span></p>
-  <p><strong>Error:</strong> <span id="error">없음</span></p>
-  <p><strong>현재 URL:</strong> <span id="raw-url"></span></p>
+<body>
+  <div class="wrap">
+    <h1>Kakao Redirect</h1>
+    <div class="muted" id="status">redirecting…</div>
+    <a id="fallback" class="btn" href="kfortune://oauth">앱으로 돌아가기</a>
+    <p class="muted">2초 내 자동 이동이 안 되면 버튼을 탭하세요.</p>
+  </div>
 </body>
 </html>
