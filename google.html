@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KFortune · Kakao 로그인 연결</title>
-  <meta http-equiv="refresh" content="6;url=data:text/plain,Invalid Kakao redirect" />
+  <title>KFortune · Google 로그인 연결</title>
+  <meta http-equiv="refresh" content="6;url=data:text/plain,Invalid Google redirect" />
   <style>
     :root { color-scheme: light dark; }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Apple SD Gothic Neo, Pretendard, "Helvetica Neue", Arial, sans-serif;
-      background: #f6f3ff;
-      color: #1f1b2e;
+      background: #eefbff;
+      color: #112138;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,11 +22,11 @@
     main {
       width: 100%;
       max-width: 420px;
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(18px);
       border-radius: 16px;
       padding: 28px 24px;
-      box-shadow: 0 16px 40px rgba(91, 60, 240, 0.15);
+      box-shadow: 0 16px 40px rgba(66, 133, 244, 0.16);
     }
     h1 {
       margin: 0 0 12px;
@@ -40,7 +40,7 @@
     .status {
       margin: 18px 0;
       font-size: 15px;
-      color: #5c3ef2;
+      color: #1a73e8;
       word-break: break-all;
     }
     a.btn {
@@ -50,23 +50,23 @@
       border-radius: 12px;
       font-weight: 600;
       color: #fff;
-      background: #7354ff;
+      background: #1a73e8;
       text-decoration: none;
-      box-shadow: 0 8px 18px rgba(86, 62, 242, 0.28);
+      box-shadow: 0 8px 18px rgba(26, 115, 232, 0.25);
     }
     a.btn:focus-visible {
-      outline: 3px solid rgba(92, 62, 242, 0.45);
+      outline: 3px solid rgba(26, 115, 232, 0.45);
       outline-offset: 3px;
     }
     .muted {
       margin-top: 18px;
       font-size: 13px;
-      color: rgba(31, 27, 46, 0.62);
+      color: rgba(17, 33, 56, 0.66);
     }
   </style>
   <script>
     (function () {
-      var APP_TARGET = "kfortune://oauth/kakao";
+      var APP_TARGET = "kfortune://oauth/google";
 
       function buildAppUrl() {
         var search = window.location.search || "";
@@ -97,8 +97,8 @@
         var appUrl = buildAppUrl();
 
         if (!appUrl) {
-          status.textContent = "카카오 로그인 정보가 확인되지 않았습니다.";
-          fallback.textContent = "앱으로 돌아가기";
+          status.textContent = "Google 로그인 정보가 확인되지 않았습니다.";
+          fallback.textContent = "웹으로 돌아가기";
           fallback.href = "https://kfortune.co.kr";
           fallback.setAttribute("role", "link");
           return;
@@ -113,11 +113,11 @@
 </head>
 <body>
   <main>
-    <h1>KFortune Kakao 로그인</h1>
-    <p>카카오 인증이 완료되면 이 페이지가 KFortune 앱을 자동으로 실행해요.</p>
+    <h1>KFortune Google 로그인</h1>
+    <p>Google 인증이 완료되면 이 페이지가 KFortune 앱을 자동으로 열어드려요.</p>
     <p class="status" id="status">로그인 정보를 확인하고 있습니다…</p>
     <a class="btn" id="fallback" href="#">앱으로 이동</a>
-    <p class="muted">몇 초 후에도 이동하지 않는다면 버튼을 눌러주세요.</p>
+    <p class="muted">몇 초 뒤에도 이동이 안 되면 버튼을 눌러주세요.</p>
   </main>
 </body>
 </html>

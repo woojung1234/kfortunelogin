@@ -1,19 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <title>KFortuneHunters</title>
+  <title>KFortune OAuth Redirects</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background:#faf8ff; }
-    main { text-align: center; }
-    a { color: #5c3ef2; text-decoration: none; }
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Apple SD Gothic Neo, Pretendard, "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f2ff, #f8fbff);
+      color: #221c35;
+      padding: 32px 16px;
+      box-sizing: border-box;
+    }
+    main {
+      text-align: center;
+      padding: 32px;
+      max-width: 560px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 18px;
+      box-shadow: 0 20px 48px rgba(92, 62, 242, 0.15);
+    }
+    h1 {
+      margin-bottom: 16px;
+      font-size: 26px;
+    }
+    p {
+      margin: 12px 0 24px;
+      line-height: 1.6;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    a {
+      color: #5c3ef2;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid rgba(92, 62, 242, 0.32);
+      border-radius: 10px;
+      padding: 10px 18px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      background: rgba(92, 62, 242, 0.08);
+    }
+    a:hover,
+    a:focus-visible {
+      box-shadow: 0 12px 24px rgba(92, 62, 242, 0.2);
+      transform: translateY(-2px);
+      background: rgba(92, 62, 242, 0.15);
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>KFortuneHunters Redirect</h1>
-    <p>이 페이지는 Kakao 로그인 리다이렉트를 위해 사용됩니다.</p>
-    <p>테스트용으로 Kakao 리다이렉트 페이지는 <a href="/kakao.html">kakao.html</a>에서 확인할 수 있어요.</p>
+    <h1>KFortune 소셜 로그인 리디렉트</h1>
+    <p>이 도메인은 HTTPS 리디렉트를 요구하는 카카오와 Google OAuth 인증을<br />
+      KFortune 앱 스킴(<code>kfortune://</code>)으로 안전하게 전달하기 위한 중간 페이지입니다.</p>
+    <ul>
+      <li><a href="/kakao.html">카카오 로그인 리디렉트</a></li>
+      <li><a href="/google.html">Google 로그인 리디렉트</a></li>
+    </ul>
   </main>
 </body>
 </html>
+
