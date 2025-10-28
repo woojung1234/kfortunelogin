@@ -1,0 +1,130 @@
+<!doctype html>
+  <html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KFortune · Twitter 로그인 연결</title>
+    <meta http-equiv="refresh" content="6;url=data:text/plain,Invalid Twitter redirect" />
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Apple SD Gothic Neo, Pretendard, "Helvetica Neue", Arial, sans-serif;
+        background: #000000;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
+        box-sizing: border-box;
+      }
+      main {
+        width: 100%;
+        max-width: 420px;
+        background: rgba(29, 155, 240, 0.08);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(29, 155, 240, 0.2);
+        border-radius: 16px;
+        padding: 28px 24px;
+        box-shadow: 0 16px 40px rgba(29, 155, 240, 0.25);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1DA1F2;
+      }
+      p {
+        margin: 12px 0;
+        line-height: 1.55;
+        color: #e7e9ea;
+      }
+      .status {
+        margin: 18px 0;
+        font-size: 15px;
+        color: #1DA1F2;
+        word-break: break-all;
+      }
+      a.btn {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: #fff;
+        background: #1DA1F2;
+        text-decoration: none;
+        box-shadow: 0 8px 18px rgba(29, 161, 242, 0.3);
+      }
+      a.btn:focus-visible {
+        outline: 3px solid rgba(29, 161, 242, 0.45);
+        outline-offset: 3px;
+      }
+      .muted {
+        margin-top: 18px;
+        font-size: 13px;
+        color: rgba(231, 233, 234, 0.62);
+      }
+    </style>
+    <script>
+      (function () {
+        var APP_TARGET = "kfortune://oauth/twitter";
+
+        function buildAppUrl() {
+          var search = window.location.search || "";
+          var hash = window.location.hash || "";
+
+          try {
+            var params = new URLSearchParams(search);
+            // Twitter OAuth 1.0a는 oauth_token과 oauth_verifier를 사용
+            var hasToken = params.has("oauth_token") && params.has("oauth_verifier");
+            var hasError = params.has("error") || params.has("denied");
+
+            if (!hasToken && !hasError) {
+              return null;
+            }
+          } catch (_) {
+            return null;
+          }
+
+          var query = search && search.length > 1 ? search : "";
+          return APP_TARGET + query + hash;
+        }
+
+        function deepLink(url) {
+          try { window.location.replace(url); } catch (_) {}
+          setTimeout(function () { try { window.location.href = url; } catch (_) {} }, 800);
+          setTimeout(function () { try { window.location.assign(url); } catch (_) {} }, 1600);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          var fallback = document.getElementById("fallback");
+          var status = document.getElementById("status");
+          var appUrl = buildAppUrl();
+
+          if (!appUrl) {
+            status.textContent = "Twitter 로그인 정보가 확인되지 않았습니다.";
+            fallback.textContent = "앱으로 돌아가기";
+            fallback.href = "https://kfortune.co.kr";
+            fallback.setAttribute("role", "link");
+            return;
+          }
+
+          status.textContent = "앱으로 연결 중: " + appUrl;
+          fallback.href = appUrl;
+          deepLink(appUrl);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>KFortune Twitter 로그인</h1>
+      <p>Twitter 인증이 완료되면 이 페이지가 KFortune 앱을 자동으로 실행해요.</p>
+      <p class="status" id="status">로그인 정보를 확인하고 있습니다…</p>
+      <a class="btn" id="fallback" href="#">앱으로 이동</a>
+      <p class="muted">몇 초 후에도 이동하지 않는다면 버튼을 눌러주세요.</p>
+    </main>
+  </body>
+  </html>
